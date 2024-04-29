@@ -46,6 +46,8 @@ function App() {
               courses.forEach((c) => {
                 if (d.ssl_url.includes(c)) {
                   coursename = c;
+                } else {
+                  coursename = d.ssl_url;
                 }
               });
 
