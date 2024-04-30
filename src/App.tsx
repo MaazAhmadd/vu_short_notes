@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 const Accounting_Banking_Finance = [
   {
@@ -1505,7 +1505,7 @@ const Physics = [
   {
     name: "phy101",
     url: "https://phy101-vu.netlify.app",
-    available: false,
+    available: true,
   },
   {
     name: "phy301",
@@ -1758,6 +1758,13 @@ const courses = [
 function App() {
   const [coursesToDisplay, setCoursesToDisplay] = useState(courses);
   const [searchText, setSearchText] = useState("");
+  useEffect(() => {
+    console.log(
+      "all courses: ",
+      courses.length,
+      courses.map((c) => c.name)
+    );
+  }, []);
   return (
     <div className="container mx-auto   ">
       <NavBar />
