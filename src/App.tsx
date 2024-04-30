@@ -1,71 +1,57 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
-import axios, { AxiosError } from "axios";
 
-type NetlifyResponse = {
-  ssl_url: string; // https://mth101-vu.netlify.app
-  screenshot_url: string;
-};
-const courses = ["mth101"];
+const courses = [{ name: "mth101", url: "https://mth101-vu.netlify.app" }];
 function App() {
-  const [data, setData] = useState<NetlifyResponse[]>();
-  const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios
-      .get("https://api.netlify.com/api/v1/sites", {
-        headers: {
-          Authorization: `Bearer ${process.env.SITES_FETCH_TOKEN}`,
-        },
-      })
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        setError((err as AxiosError).response?.data as string);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+  const [coursesToDisplay, setCoursesToDisplay] = useState(courses);
+  const [searchText, setSearchText] = useState("");
   return (
-    <div className="container mx-auto !bg-primary !text-secondary ">
+    <div className="container mx-auto   ">
       <NavBar />
       <MainDescription />
-      <h1 className="mt-6 md:mt-10">List Of Available Notes:</h1>
-      <div>
-        {loading && <div className="mt-4 md:mt-8 md:px-24">Loading...</div>}
+      <div className="prose">
+        <h1 className="mt-6 md:mt-10">List Of Available Notes:</h1>
       </div>
-      <div>{error && <div>{error}</div>}</div>
       <div className="mt-4 md:mt-8 md:px-24 p-4">
-        {data && (
-          <ol>
-            {data.map((d) => {
-              let coursename = "";
-              courses.forEach((c) => {
-                if (d.ssl_url.includes(c)) {
-                  coursename = c;
-                }
-              });
-              if (!coursename) {
-                coursename = d.ssl_url;
-              }
-
-              return (
-                <li>
-                  <a
-                    target="_blank"
-                    href={d.ssl_url}
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mb-2"
-                  >
-                    {coursename.toUpperCase()}
-                  </a>
-                </li>
+        <label className="input input-bordered flex items-center gap-2">
+          <input
+            type="text"
+            className="grow"
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+              setCoursesToDisplay(
+                courses.filter((d) =>
+                  d.name.toLowerCase().includes(e.target.value.toLowerCase())
+                )
               );
-            })}
-          </ol>
-        )}
+            }}
+            placeholder="Search"
+          />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            fill="currentColor"
+            className="w-4 h-4 opacity-70"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </label>
+      </div>
+      <div className="flex justify-center md:justify-start flex-wrap gap-4 mt-2 md:mt-4 md:px-24 p-4">
+        {coursesToDisplay.map((d) => {
+          return (
+            <button className="btn btn-primary mb-2">
+              <a target="_blank" href={d.url}>
+                {d.name.toUpperCase()}
+              </a>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -75,24 +61,35 @@ export default App;
 
 const NavBar = () => {
   return (
-    <div className="flex justify-between items-center fixed top-0 w-full">
-      <img
-        src="correct-vu-notes-logo-removebg-preview.png"
-        alt=""
-        className="md:size-14 size-10"
-      />
-      <h1 className="font-bold md:text-5xl text-2xl">
-        Virtual University Short Notes
-      </h1>
-      <div className="md:w-10"></div>
+    <div className="navbar bg-base-100">
+      <div className="flex-1">
+        <a className="btn btn-ghost text-xl">Virtual University Short Notes</a>
+      </div>
+      <div className="flex-none">
+        <div className="">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar"
+          >
+            <div className="w-10 rounded-full">
+              <img src="correct-vu-notes-logo-removebg-preview.png" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
+
 const MainDescription = () => {
   return (
-    <h3 className="text-center md:text-2xl text-lg mt-14 md:mt-20">
-      This is a Hobby Project, If you like these notes feel free to share it
-      with your friends
-    </h3>
+    <div className="prose mx-auto p-2 md:max-w-[80ch]">
+      <h3>
+        This is a Hobby Project, If you like these notes feel free to share it
+        with your friends. These are high quality summarized notes you can use
+        to cover up your syllabus in no time.
+      </h3>
+    </div>
   );
 };
