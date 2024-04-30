@@ -16,7 +16,7 @@ function App() {
     axios
       .get("https://api.netlify.com/api/v1/sites", {
         headers: {
-          Authorization: `Bearer nfp_92dJzLySkXAAe8GREh2grbdYz493KmZy4e16`,
+          Authorization: `Bearer ${process.env.SITES_FETCH_TOKEN}`,
         },
       })
       .then((res) => {
