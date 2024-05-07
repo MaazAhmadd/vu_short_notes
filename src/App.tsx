@@ -355,7 +355,7 @@ const Computer_Science_Information_Technology = [
   {
     name: "cs403",
     url: "https://cs403-vu.netlify.app",
-    available: false,
+    available: true,
   },
   {
     name: "cs405",
