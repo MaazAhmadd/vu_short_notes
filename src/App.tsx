@@ -1810,11 +1810,11 @@ function App() {
           )
           .map((d) => {
             return (
-              <button className="btn btn-primary mb-2 " disabled={!d.available}>
-                <a target="_blank" href={d.url}>
+              <a target="_blank" href={d.url} className="mb-2">
+                <button className="btn btn-primary" disabled={!d.available}>
                   {d.name.toUpperCase()}
-                </a>
-              </button>
+                </button>
+              </a>
             );
           })}
       </div>
