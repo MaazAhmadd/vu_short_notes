@@ -1809,12 +1809,16 @@ function App() {
             a.available === b.available ? 0 : a.available ? -1 : 1
           )
           .map((d) => {
-            return (
+            return d.available ? (
               <a target="_blank" href={d.url} className="mb-2">
-                <button className="btn btn-primary" disabled={!d.available}>
+                <button className="btn btn-primary">
                   {d.name.toUpperCase()}
                 </button>
               </a>
+            ) : (
+              <button className="btn btn-primary mb-2" disabled={true}>
+                {d.name.toUpperCase()}
+              </button>
             );
           })}
       </div>
